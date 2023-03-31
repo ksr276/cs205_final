@@ -14,16 +14,18 @@
 #!/bin/bash
 
 FILE="$1"
-#here, our file is our first variable, in this case being pokemon.dat
+#Here, our file is our first variable, in this case being pokemon.dat
 TOTAL=$(awk 'END {print NR-1}' $FILE)
-#NR-1 ensures that the first row is not counted when displaying the total amount of pokemon
-HP=$(awk 'BEGIN{FS "\t"}NR-1{sum+=$6}END{print sum/(NR-1)}' $FILE)
-#Here, the field separator is identified as tab. the total of column 6 is added then divided by the total number of inputs
-ATTACK=$(awk 'BEGIN{FS "\t"}NR-1{sum+=$7}END{print sum/(NR-1)}' $FILE)
-#this is the same as the other average, with the 6th column being replaced by the 7th
+#NR-1 ensures that the first row is not counted when displaying the total amount of lines in the file
+HP=$(awk -F'\t'  '{ sum += $6} END { print sum / (NR-1) }' $FILE)
+#Here, the field separator is identified as tab, with -F'\t'. The sum of the sixth column is tracked, then divided by the number of lines, excluding the first.
+ATTACK=$(awk -F'\t' '{ sum += $7} END { print sum / (NR-1) }' $FILE)
+#This is the same as the other average, with the 6th column being replaced by the 7th
 
 echo "===== SUMMARY OF DATA FILE ====="
 echo "	File name: $FILE"
 echo "	Total Pokemon: ${total}"
 echo "	Avg. HP: ${HP}"
 echo "	Avg. Attack: ${ATTACK}"
+
+#Each of our variables are echoed in the correct format.
